@@ -230,20 +230,20 @@ For the user use `pi`.
 
 I sometimes find that bringing my IPad is easier than my laptop.
 To be able to code properly I will use code-server to run a vscode instance on the Pi and connect to it remotely.
-Install code-server by running this command
+Install code-server by running this command.
 
 ```
 curl -fsSL https://code-server.dev/install.sh | sh
 ```
 
-Enable and start code-server
+Enable and start code-server.
 
 ```
 sudo systemctl enable code-server@pi
 sudo systemctl start code-server@pi
 ```
 
-Open config file `~/.config/code-server/config.yaml`
+Open config file `~/.config/code-server/config.yaml`.
 
 ```
 bind-addr: <Your_PI_IP4_tailscale_address_here>:8080
@@ -252,13 +252,13 @@ password: <will be generated>
 cert: false
 ```
 
-Restart code-server service
+Restart code-server service.
 
 ```
 sudo systemctl restart code-server@pi
 ```
 
-Open 8080 port
+Open 8080 port.
 
 ```
 sudo ufw allow in on tailscale0 to any port 8080
@@ -284,13 +284,13 @@ In the SSH config section put.
 LocalForward 8080 <Your_PI_IP4_tailscale_address_here>:8080
 ```
 
-First you need to connect to Pi. In the Blink app run
+First you need to connect to Pi. In the Blink app run.
 
 ```
 ssh pi@pi
 ```
 
-Then create a new tab and run
+Then create a new tab and run.
 
 ```
 code http://localhost:8080
