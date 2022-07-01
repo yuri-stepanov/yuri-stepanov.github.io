@@ -123,38 +123,38 @@ We will use it to lock down any ports that we are not using.
 Be careful. Until we finish this stage you should be able to connect the monitor and keyboard.
 It is very easy to get yourself locked out of the Pi.
 
-First we make sure that by default we deny any incoming connection
+First we make sure that by default we deny any incoming connection.
 
 ```
 sudo ufw default deny incoming
 ```
 
-And allow outgoing
+And allow outgoing.
 
 ```
 sudo ufw default allow outgoing
 ```
 
-Then we open `ssh` port
+Then we open `ssh` port.
 
 ```
 sudo ufw allow in on tailscale0 to any port 22
 ```
 
 Here `tailscale0` is the name of the interface for which `ufw` will create a rule.
-You can get all available interfaces on your system by running
+You can get all available interfaces on your system by running.
 
 ```
 ip address
 ```
 
-Let's make sure that the rule was created by running
+Let's make sure that the rule was created by running.
 
 ```
 sudo ufw status
 ```
 
-You should see something like this
+You should see something like this.
 
 ```
 To                         Action      From
@@ -163,7 +163,7 @@ To                         Action      From
 22 (v6) on tailscale0      ALLOW       Anywhere
 ```
 
-Disable and reenable UFW to changes to take effect
+Disable and reenable UFW to changes to take effect.
 
 ```
 sudo ufw disable
@@ -175,11 +175,11 @@ I will be using UFW throughout the rest of the chapters to open ports for releva
 ## 5. Samba {#samba}
 
 I have an external hard drive that I use as a fileshare.
-We are going to turn it into a `samba` share that is available through tailscale.
+We are going to turn it into a samba share that is available through tailscale.
 
 Open `/etc/samba/smb.conf`
 
-In the end add a section
+In the end add a section.
 
 ```
 [share]
@@ -194,14 +194,14 @@ In the end add a section
 
 `path` here is where you have mounted your external hard drive.
 
-Enable and start the service
+Enable and start the service.
 
 ```
 sudo systemctl enable smbd
 sudo systemctl start smbd
 ```
 
-We also need to open port for `samba`
+We also need to open port for samba.
 
 ```
 sudo ufw allow in on tailscale0 to any port 445
@@ -213,7 +213,7 @@ For the user use `pi`.
 
 > ### Sidenote
 >
-> I have tried to use `interfaces` and `bind interfaces only` option in `smb.conf` to force `samba` to use the tailscale interface but unsuccessfully.
+> I have tried to use `interfaces` and `bind interfaces only` option in `smb.conf` to force samba to use the tailscale interface but unsuccessfully.
 > If you specify only tailscale interface and enable `bind interfaces only` you will get the following error:
 >
 > ```
@@ -329,7 +329,7 @@ mosh -p 60000 pi@pi
 
 ## 9. Conclusion {#conclusion}
 
-Every computer in my family is connected to `samba` via `tailscale`.
+Every computer in my family is connected to samba via tailscale.
 We can store and share files with each other.
 I can connect to the vscode from my IPad and code from anywhere.
 
