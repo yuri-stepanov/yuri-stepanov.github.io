@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "My PI setup"
+title: "My Pi setup"
 date: 2022-06-30
-categories: Raspberry-PI
+categories: Raspberry-Pi
 ---
 
-# My Raspberry PI setup
+# My Raspberry Pi setup
 
 1. [Motivation and assumptions](#motivation)
 2. [Tailscale](#tailscale)
@@ -19,30 +19,30 @@ categories: Raspberry-PI
 
 ## 1. Motivation and assumptions {#motivation}
 
-Some of you may have a Raspberry PI laying around.
+Some of you may have a Raspberry Pi laying around.
 You've bought it on a whim and wanted to build something with it.
 Me too!
-Even though the internet is full of interesting [PI projects](https://www.reddit.com/r/raspberry_pi/), I've never got around to finish one (automatic water supply for plants was my dream).
-But PI can be useful for some simple everyday tasks.
+Even though the internet is full of interesting [Pi projects](https://www.reddit.com/r/raspberry_pi/), I've never got around to finish one (automatic water supply for plants was my dream).
+But Pi can be useful for some simple everyday tasks.
 Here I will try to show you how I got around to use mine.
 Also this is a reference for myself on how to reinstall everything.
 
-I assume that Raspberry OS installed and the PI is connected to your local network.
-Before we setup SSH and UFW we need to have a monitor and a keyboard connected to the PI.
+I assume that Raspberry OS installed and the Pi is connected to your local network.
+Before we setup SSH and UFW we need to have a monitor and a keyboard connected to the Pi.
 Other steps can be done remotely.
-You will also need a separate (main) computer with a terminal from which you are going to connect to your PI.
+You will also need a separate (main) computer with a terminal from which you are going to connect to your Pi.
 
 ## 2. Tailscale {#tailscale}
 
 Tailscale can be described as managed WireGuard.
 We will use it to create our own VPN.
-With that you will be able to access our PI from anywhere securely.
+With that you will be able to access our Pi from anywhere securely.
 A guide on how to start with tailscale can be found [here](https://tailscale.com/kb/1017/install/).
-And on how to install it on a PI can be found [here](https://tailscale.com/download/linux/rpi).
-By the end you should see your PI in the [console](https://login.tailscale.com/admin/machines).
+And on how to install it on a Pi can be found [here](https://tailscale.com/download/linux/rpi).
+By the end you should see your Pi in the [console](https://login.tailscale.com/admin/machines).
 I use MagicDNS. You can enable it [here](https://login.tailscale.com/admin/dns).
 I have changed my machine name to `pi`.
-Hereafter I will use it as my PI DNS name.
+Hereafter I will use it as my Pi DNS name.
 
 ## 3. SSH {#ssh}
 
@@ -55,7 +55,7 @@ Open it in any editor and change the line with `ListenAddress` option.
 ListenAddress <Your_PI_IP4_tailscale_address_here>
 ```
 
-You can find PI's address in the [console](https://login.tailscale.com/admin/machines).
+You can find Pi's address in the [console](https://login.tailscale.com/admin/machines).
 
 During the startup tailscale service can start a bit later or for example something might be wrong with the network.
 This will make SSH service fail. The easy way to fix that is by adding an option to restart SSH service automatically.  Open this file `/etc/systemd/system/multi-user.target.wants/ssh.service` and delete the following line `RestartPreventExitStatus`. Also change the following lines.
@@ -66,14 +66,14 @@ RestartSec=5
 ```
 
 Let's start SSH service and make sure it will be started during the startup.
-On the PI with a connected monitor and keyboard execute the following commands in the console.
+On the Pi with a connected monitor and keyboard execute the following commands in the console.
 
 ```
 sudo systemctl start ssh
 sudo systemctl enable ssh
 ```
 
-By default we can login using the username and password, that you have created during PI setup.
+By default we can login using the username and password, that you have created during Pi setup.
 It would be easier and safer to login using a key.
 Let's create a new key.
 On your main machine execute.
@@ -84,21 +84,21 @@ ssh-keygen
 
 This command will generate a public / private key pair in the `~/.ssh` folder.
 By default they will be given names `id_rsa` and `id_rsa.pub`.
-Let's copy our key to the PI.
+Let's copy our key to the Pi.
 
 ```
 ssh-copy-id -i ~/.ssh/id_rsa pi@pi
 ```
 
 Here the second `pi` is the username.
-With that we should be able to login remotely to our PI.
+With that we should be able to login remotely to our Pi.
 Try to execute on your main machine.
 
 ```
 ssh pi@pi
 ```
 
-If all goes well you should see your prompt changed to PI's.
+If all goes well you should see your prompt changed to Pi's.
 Now we can disable login with the password by changing the following options in `/etc/ssh/sshd_config`.
 
 ```
@@ -114,14 +114,14 @@ Restart SSH service for changes to take effect.
 sudo systemctl restart ssh
 ```
 
-After that you should be able to login to your PI using a key only.
+After that you should be able to login to your Pi using a key only.
 
 ## 4. UFW {#ufw}
 
 Or Uncomplicated Firewall is an interface for `iptables`.
 We will use it to lock down any ports that we are not using.
 Be careful. Until we finish this stage you should be able to connect the monitor and keyboard.
-It is very easy to get yourself locked out of the PI.
+It is very easy to get yourself locked out of the Pi.
 
 First we make sure that by default we deny any incoming connection
 
@@ -229,7 +229,7 @@ For the user use `pi`.
 ## 6. Code-server {#code-server}
 
 I sometimes find that bringing my IPad is easier than my laptop.
-To be able to code properly I will use code-server to run a vscode instance on the PI and connect to it remotely.
+To be able to code properly I will use code-server to run a vscode instance on the Pi and connect to it remotely.
 Install code-server by running this command
 
 ```
@@ -277,14 +277,14 @@ First open the config by typing.
 config
 ```
 
-Create a host for PI.
+Create a host for Pi.
 In the SSH config section put.
 
 ```
 LocalForward 8080 <Your_PI_IP4_tailscale_address_here>:8080
 ```
 
-First you need to connect to PI. In the Blink app run
+First you need to connect to Pi. In the Blink app run
 
 ```
 ssh pi@pi
@@ -300,14 +300,14 @@ Code editor should open. Use the password from the config file to login.
 
 > ### Sidenote
 >
-> Unfortunately the step of connecting via SSH to PI is required.
+> Unfortunately the step of connecting via SSH to Pi is required.
 > If you just execute `code http://localhost:8080` nothing will happen.
 
 ## 8. Mosh {#mosh}
 
 Mosh allows you to maintain your SSH connection over unstable networks.
 Even if you switch from WiFi to cellular it won't drop the connection.
-Install it on PI.
+Install it on Pi.
 
 ```
 sudo apt-get install mosh
